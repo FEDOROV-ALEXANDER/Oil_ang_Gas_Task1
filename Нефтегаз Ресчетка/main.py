@@ -7,16 +7,16 @@ import seaborn as sns
 # TODO реализовать увеличение картинки (отрисовка ее части) около скважины
 # TODO подумать на счет создания классов для скважин, так будет удобнее наверное
 # Ввод входных значений
-length, width = 10000, 10000  # [м] геометрические размеры рассчитываемой области
-dx, dy = 100, 100   # [м] шаг по направлениям
+length, width = 100, 100  # [м] геометрические размеры рассчитываемой области
+dx, dy = 10, 10   # [м] шаг по направлениям
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
 T = 365
 
 # координаты скважины
-x_w = 300
-y_w = 1300
+x_w = 50
+y_w = 80
 r_w = 1.5
 # пока будет одна скважина, нагнетательная
 q_injection = 10  # [м3/сут] дебит нагнетательных скважин
@@ -39,7 +39,10 @@ pressure_start[-1, :] = 0
 pressure_start[:, 0] = 0
 pressure_start[:, -1] = 0
 
-pressure, pressure_w = solve_for_one_well(X, Y, x_w, y_w, q_injection, r_w, coef, pressure_start.copy(), T, dt, eta)
+pressure, pressure_w, t = solve_for_one_well(X, Y, x_w, y_w, q_injection, r_w, coef, pressure_start.copy(), T, dt, eta)
+t = np.array(t)
+pressure_w = np.array(pressure_w)
+print(t.shape, pressure_w.shape)
 
 # Визуализация распределения давления
 plt.figure(figsize=(8, 6))
@@ -48,4 +51,12 @@ plt.colorbar(label='Давление')
 plt.title(f'Распределение давления через {T} дней')
 plt.xlabel('X')
 plt.ylabel('Y')
+plt.show()
+
+
+
+plt.figure(figsize=(8, 6))
+plt.plot(t, pressure_w)
+plt.xlabel('Время')
+plt.ylabel('Давление на забое скважины')
 plt.show()

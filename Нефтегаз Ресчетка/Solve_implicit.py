@@ -97,3 +97,4 @@ plt.title(f'Распределение давления в момент врем
 plt.xlabel('X')
 plt.ylabel('Y')
 plt.show()
+
