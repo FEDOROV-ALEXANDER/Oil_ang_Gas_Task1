@@ -1,25 +1,33 @@
 import numpy as np
 from Solve import solve_for_one_well
 import matplotlib.pyplot as plt
+import math as m
 import seaborn as sns
 # TODO теперь надо постараться реализовать для нескольких скважин
 # TODO реализовать неявный метод
 # TODO реализовать увеличение картинки (отрисовка ее части) около скважины
 # TODO подумать на счет создания классов для скважин, так будет удобнее наверное
+
+def choose_step(length, width, x_w, y_w):
+    dx, dy = m.gcd(length, x_w), m.gcd(width, y_w)
+    return dx, dy
+# координаты скважины
+x_w = 55
+y_w = 85
+r_w = 1.5
+# пока будет одна скважина, нагнетательная
+q_injection = 10  # [м3/сут] дебит нагнетательных скважин
+
+
 # Ввод входных значений
 length, width = 100, 100  # [м] геометрические размеры рассчитываемой области
-dx, dy = 10, 10   # [м] шаг по направлениям
+dx, dy = choose_step(length, width, x_w, y_w)   # [м] шаг по направлениям
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
 T = 365
 
-# координаты скважины
-x_w = 50
-y_w = 80
-r_w = 1.5
-# пока будет одна скважина, нагнетательная
-q_injection = 10  # [м3/сут] дебит нагнетательных скважин
+
 
 B = 5  # Объемный коэффициент
 h = 20  # толщина пласта
