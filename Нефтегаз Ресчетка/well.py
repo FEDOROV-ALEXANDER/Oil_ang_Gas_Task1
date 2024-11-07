@@ -3,7 +3,7 @@ class Well:
         self.x_w = x_w  # координата скважины по х
         self.y_w = y_w  # координата скважины по у
         self.r_w = r_w  # радиус скважины
-        self.q = q  # l
+        self.q = q  # м3/с
 
     def __str__(self):
         """
