@@ -13,6 +13,7 @@ def well_boundary_condition(X, Y, p, q, coef, N_x, N_y, r_w):
 def solve_for_one_well_explicit(X, Y, x_w, y_w, q, r_w, coef, pressure_start, T, eta):
     pressure_w = []
     productivity = []
+    history = []
     X = X - x_w
     Y = Y - y_w
     dx = X[1] - X[0]
@@ -40,7 +41,8 @@ def solve_for_one_well_explicit(X, Y, x_w, y_w, q, r_w, coef, pressure_start, T,
         # Посчитаю продуктивность, руководствовался этим: https://ru.wikipedia.org/wiki/Продуктивность_(нефтедобыча),
         # https: // vseonefti.ru / useful /
         productivity.append(q / -pressure_start[int(a[0]), int(b[0])]*10000)
-    return pressure_start/10000, pressure_w, productivity, time
+        history.append(pressure_start/10000)
+    return pressure_start/10000, pressure_w, productivity, time, history
 
 
 

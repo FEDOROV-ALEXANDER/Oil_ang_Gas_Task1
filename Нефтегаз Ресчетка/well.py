@@ -12,6 +12,7 @@ class Well:
         self.time_well = np.empty((0, 0))
         self.number = number
         self.productivity = np.empty((0, 0))
+        self.history = []
 
 
 

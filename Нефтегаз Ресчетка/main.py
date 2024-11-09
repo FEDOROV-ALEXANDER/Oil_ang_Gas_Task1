@@ -73,9 +73,11 @@ plt.show()
 
 begin = t.time()
 for well in wells:
+    history = []
     # Используем явный метод
-    well.pressure_field, well.pressure_well, well.productivity,  well.time_well = solve_for_one_well_explicit(X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
+    well.pressure_field, well.pressure_well, well.productivity,  well.time_well, well.history = solve_for_one_well_explicit(X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
     pressure += well.pressure_field
+    history += well.history
 print(t.time() - begin)
 
 
