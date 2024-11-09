@@ -1,3 +1,5 @@
+from matplotlib.pyplot import legend
+
 from Solve import solve_for_one_well_explicit
 import matplotlib.pyplot as plt
 import math as m
@@ -14,22 +16,22 @@ def choose_step(length, width, x_wells, y_wells):
 
 # данные для скважин скважины
 wells = [
-    Well(3560, 2500, 1.5, 800, 1),
-    Well(250, 2000, 1.5, 1000, 2),
-    Well(1700, 2200, 1.5, -700, 3),
-    Well(300, 1000, 1.5, -400, 4),
+    Well(1000, 1725, 1.5, 800, 1),
+    Well(750, 1500, 1.5, 1000, 2),
+    Well(1000, 1000, 1.5, -700, 3),
+    Well(1700, 1700, 1.5, -400, 4),
 
 ]
 
 
 # Ввод входных значений
-length, width = 4000, 4000  # [м] геометрические размеры рассчитываемой области
+length, width = 2500, 2500  # [м] геометрические размеры рассчитываемой области
 dx, dy = choose_step(length, width, [well.x_w for well in wells],
                      [well.y_w for well in wells])  # [м] шаг по направлениям
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
-T =  365  # время работы в секундах
+T =  365 * 10  # время работы в сутках
 
 B = 1.2  # Объемный коэффициент
 h = 10  # толщина пласта
@@ -72,7 +74,7 @@ plt.show()
 begin = t.time()
 for well in wells:
     # Используем явный метод
-    well.pressure_field, well.pressure_well, well.time_well = solve_for_one_well_explicit(X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
+    well.pressure_field, well.pressure_well, well.productivity,  well.time_well = solve_for_one_well_explicit(X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
     pressure += well.pressure_field
 print(t.time() - begin)
 
@@ -96,4 +98,12 @@ ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_title('Явный')
 plt.show()
-print("nvnn")
+
+plt.figure()
+for well in wells:
+    if well.q <=0:
+        plt.plot(well.time_well, well.productivity)
+        plt.legend(f'Продуктивность {well.number} скважины')
+plt.xlabel('Время, сут')
+plt.ylabel('Продуктивность, м3/Бар')
+plt.show()

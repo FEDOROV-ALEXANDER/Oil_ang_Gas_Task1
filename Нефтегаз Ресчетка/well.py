@@ -11,6 +11,7 @@ class Well:
         self.pressure_field = np.empty((0, 0))
         self.time_well = np.empty((0, 0))
         self.number = number
+        self.productivity = np.empty((0, 0))
 
 
 
