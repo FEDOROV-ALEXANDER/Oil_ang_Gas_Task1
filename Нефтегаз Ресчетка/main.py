@@ -1,4 +1,6 @@
 import numpy as np
+from sympy.physics.units import pressure
+
 from Solve import solve_for_one_well_implicit, solve_for_one_well_explicit
 import matplotlib.pyplot as plt
 import math as m
@@ -8,37 +10,29 @@ import seaborn as sns
 
 # TODO теперь надо постараться реализовать для нескольких скважин
 
-# TODO реализовать увеличение картинки (отрисовка ее части) около скважины
-
-# TODO замерить на интерес время
-# TODO Придумать, что делать со врменем и q. На данный момент они в секундах, если как по учебнику
-# TODO скорее всего точность не очень у неявного, потому что там по автомату заадн большой шаг по времени
-
 
 def choose_step(length, width, x_wells, y_wells):
     dx, dy = m.gcd(length, *x_wells), m.gcd(width, *y_wells)
     return dx, dy
 
 
-# координаты скважины
-well_1 = Well(55, 85, 1.5, 10)
-well_2 = Well(10, 90, 1.5, 10)
-well_3 = Well(32, 16, 1.5, -10)
-well_4 = Well(45, 90, 1.5, -10)
+# данные для скважин скважины
+wells = [
+    Well(2550, 2550, 1.5, 10, 1),
+    Well(3700, 750, 1.5, 8, 2),
+    Well(255, 755, 1.5, -14, 3),
+    Well(1000, 3700, 1.5, -14, 4),
+]
 
-# пока будет одна скважина, нагнетательная
-q_injection = 10  # [м3/сут] дебит нагнетательных скважин
-# x_w = [well_1.x_w, well_2.x_w, well_3.x_w, well_4.x_w]
-# y_w = [well_1.y_w, well_2.y_w, well_3.y_w, well_4.y_w]
 
 # Ввод входных значений
-length, width = 100, 100  # [м] геометрические размеры рассчитываемой области
-dx, dy = choose_step(length, width, [well_1.x_w, well_2.x_w, well_3.x_w, well_4.x_w],
-                     [well_1.y_w, well_2.y_w, well_3.y_w, well_4.y_w])  # [м] шаг по направлениям
+length, width = 4000, 4000  # [м] геометрические размеры рассчитываемой области
+dx, dy = choose_step(length, width, [well.x_w for well in wells],
+                     [well.x_w for well in wells])  # [м] шаг по направлениям
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
-T = 365
+T = 50 * 365
 
 B = 5  # Объемный коэффициент
 h = 20  # толщина пласта
@@ -50,56 +44,41 @@ permeability = 1  # [мД] проницаемость - скаляр
 eta = 1.0
 coef = - B * viscosity / 2 / np.pi / permeability / h  # вспомогательный коэффициент
 
-pressure_start = np.full((Nx, Ny), 0)
+pressure_start = np.full((Nx, Ny), 0.0)
 pressure_start[0, :] = 0
 pressure_start[-1, :] = 0
 pressure_start[:, 0] = 0
 pressure_start[:, -1] = 0
+pressure = pressure_start.copy()
 
-# Используем неявный метод
-pressure, pressure_w, t = solve_for_one_well_implicit(X.copy(), Y.copy(), well_1.x_w, well_1.y_w, well_1.q, well_1.r_w,
-                                                      coef, pressure_start.copy(), T, eta)
-t = np.array(t)
-pressure_w = np.array(pressure_w)
-print(t.shape, pressure_w.shape)
 
-# Визуализация распределения давления
-plt.figure(figsize=(8, 6))
-plt.pcolormesh(X, Y, pressure, shading='auto', cmap='viridis')
-plt.colorbar(label='Давление')
-plt.title(f'Распределение давления через {T} дней')
-plt.xlabel('X')
-plt.title('Неявный')
-plt.ylabel('Y')
+for well in wells:
+    # Используем явный метод
+    well.pressure_field, well.pressure_well, well.time_well = solve_for_one_well_explicit(X.copy(), Y.copy(), well.x_w,
+                                                                                          well.y_w, well.q, well.r_w,
+                                                                                          coef, pressure_start.copy(),
+                                                                                          T, eta)
+
+    pressure += well.pressure_field
+
+
+
+fig, ax = plt.subplots(figsize=(8, 6), gridspec_kw={'hspace': 0})
+for well in wells:
+    ax.plot(well.time_well, well.pressure_well)
+ax.set_xlabel('Время')
+ax.set_title('Явный')
+ax.set_ylabel('Давление на забоях скважин')
+
+ax.legend([f' {well.number} скважина c дебитом {well.q} ' for well in wells])
 plt.show()
 
-plt.figure(figsize=(8, 6))
-plt.plot(t, pressure_w)
-plt.xlabel('Время')
-plt.title('Неявный')
-plt.ylabel('Давление на забое скважины')
-plt.show()
 
-# Используем явный метод
-pressure, pressure_w, t = solve_for_one_well_explicit(X.copy(), Y.copy(), well_1.x_w, well_1.y_w, well_1.q, well_1.r_w,
-                                                      coef, pressure_start.copy(), T, eta)
-t = np.array(t)
-pressure_w = np.array(pressure_w)
-print(t.shape, pressure_w.shape)
-
-# Визуализация распределения давления
-plt.figure(figsize=(8, 6))
-plt.pcolormesh(X, Y, pressure, shading='auto', cmap='viridis')
-plt.colorbar(label='Давление')
-plt.title(f'Распределение давления через {T} дней')
-plt.xlabel('X')
-plt.ylabel('Y')
-plt.title('Явный')
-plt.show()
-
-plt.figure(figsize=(8, 6))
-plt.plot(t, pressure_w)
-plt.xlabel('Время')
-plt.title('Явный')
-plt.ylabel('Давление на забое скважины')
+fig, ax = plt.subplots(figsize=(8, 6))
+cax = ax.pcolormesh(X, Y, pressure, shading='auto', cmap='viridis')
+cbar = plt.colorbar(cax, label='Давление')
+ax.set_title(f'Распределение давления через {T} дней')
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_title('Явный')
 plt.show()
