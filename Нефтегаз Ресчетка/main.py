@@ -6,10 +6,10 @@ import numpy as np
 import time as t
 import Results as r
 
+
 def choose_step(length, width, x_wells, y_wells):
     dx = dy = min(m.gcd(length, *x_wells), m.gcd(width, *y_wells))
     return dx, dy
-
 
 
 # данные для скважин скважины
@@ -21,7 +21,6 @@ wells = [
 
 ]
 
-
 # Ввод входных значений
 length, width = 2500, 2500  # [м] геометрические размеры рассчитываемой области
 dx, dy = choose_step(length, width, [well.x_w for well in wells],
@@ -29,17 +28,17 @@ dx, dy = choose_step(length, width, [well.x_w for well in wells],
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
-T =  365 * 10  # время работы в сутках
+T = 365 * 10  # время работы в сутках
 
 B = 1.2  # Объемный коэффициент
 h = 10  # толщина пласта
 
 # параметры взяты плюс-минус от балды
-viscosity = 10 * 10e-7 / 24 /60 /60  # Вязкость [Бар * сут]
+viscosity = 10 * 10e-7 / 24 / 60 / 60  # Вязкость [Бар * сут]
 compressibility = 5 * 10e-5  # [1/Бар] сжимаемость
 permeability = 100 * 10e-16  # [м2] проницаемость
 porosity = 0.05
-eta = permeability/ (porosity * compressibility * viscosity)
+eta = permeability / (porosity * compressibility * viscosity)
 
 pressure_start = np.full((Nx, Ny), 0.0)
 pressure_start[0, :] = 0
@@ -48,7 +47,7 @@ pressure_start[:, 0] = 0
 pressure_start[:, -1] = 0
 pressure = pressure_start.copy()
 permeability_matrix = np.full((Nx, Ny), permeability)
-permeability_matrix[:Nx//2, :] = permeability * 2
+permeability_matrix[:Nx // 2, :] = permeability * 2
 
 #  Тут можно создать рандомный разброс индексов
 # half_elements = (Nx * Ny) // 2
@@ -59,6 +58,7 @@ coef_matrix = B * viscosity / 2 / np.pi / permeability_matrix / h
 eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
 print(eta_matrix.mean())
 
+plt.style.use('dark_background')
 plt.figure()
 plt.title('Распределение проницаемости')
 plt.xlabel('x')
@@ -67,13 +67,12 @@ plt.pcolormesh(X, Y, permeability_matrix)
 plt.colorbar()
 plt.show()
 
-
-
 begin = t.time()
 for well in wells:
     history = []
     # Используем явный метод
-    well.pressure_field, well.pressure_well, well.productivity,  well.time_well, well.history = solve_for_one_well_explicit(X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
+    well.pressure_field, well.pressure_well, well.productivity, well.time_well, well.history = solve_for_one_well_explicit(
+        X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
     pressure += well.pressure_field
     history += well.history
 print(t.time() - begin)
@@ -81,4 +80,3 @@ print(t.time() - begin)
 r.pressure_on_wells(wells)
 r.productivity(wells)
 r.pressure_result(X, Y, pressure)
-

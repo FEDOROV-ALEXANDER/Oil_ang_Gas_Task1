@@ -5,7 +5,7 @@ from plotly.subplots import make_subplots
 import matplotlib.pyplot as plt
 
 
-def pressure_result(X, Y,  pressure):
+def pressure_result(X, Y, pressure):
     # for style in plt.style.available == dark_background:
     plt.style.use('dark_background')
     fig, ax = plt.subplots(figsize=(8, 6))
@@ -39,7 +39,7 @@ def productivity(wells):
     for well in wells:
         if well.q <= 0:
             plt.plot(well.time_well, well.productivity)
-            plt.legend(f'Продуктивность {well.number} скважины')
+            plt.legend('{} скважина с дебитом {}'.format(well.number, well.q))
     plt.xlabel('Время, сут')
     plt.ylabel('Продуктивность, м3/Бар')
     plt.show()
