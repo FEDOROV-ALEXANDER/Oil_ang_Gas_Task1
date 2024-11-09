@@ -1,12 +1,10 @@
-from matplotlib.pyplot import legend
-
 from Solve import solve_for_one_well_explicit
 import matplotlib.pyplot as plt
 import math as m
 from well import Well
 import numpy as np
-import seaborn as sns
 import time as t
+import Results as r
 
 def choose_step(length, width, x_wells, y_wells):
     dx = dy = min(m.gcd(length, *x_wells), m.gcd(width, *y_wells))
@@ -80,32 +78,7 @@ for well in wells:
     history += well.history
 print(t.time() - begin)
 
+r.pressure_on_wells(wells)
+r.productivity(wells)
+r.pressure_result(X, Y, pressure)
 
-fig, ax = plt.subplots(figsize=(8, 6), gridspec_kw={'hspace': 0})
-for well in wells:
-    ax.plot(well.time_well, well.pressure_well)
-ax.set_xlabel('Время, сут')
-ax.set_title('Явный')
-ax.set_ylabel('Давление на забоях скважин, Бар')
-ax.legend([f' {well.number} скважина c дебитом {well.q} ' for well in wells])
-plt.show()
-
-#for style in plt.style.available == dark_background:
-plt.style.use('dark_background')
-fig, ax = plt.subplots(figsize=(8, 6))
-cax = ax.pcolormesh(X, Y, pressure, shading='auto', cmap='viridis')
-cbar = plt.colorbar(cax, label='Изменение давления, бар')
-ax.set_title(f'Распределение давления через {T} дней')
-ax.set_xlabel('X')
-ax.set_ylabel('Y')
-ax.set_title('Явный')
-plt.show()
-
-plt.figure()
-for well in wells:
-    if well.q <=0:
-        plt.plot(well.time_well, well.productivity)
-        plt.legend(f'Продуктивность {well.number} скважины')
-plt.xlabel('Время, сут')
-plt.ylabel('Продуктивность, м3/Бар')
-plt.show()
