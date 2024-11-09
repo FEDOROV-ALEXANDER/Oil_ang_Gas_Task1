@@ -14,7 +14,7 @@ def choose_step(length, width, x_wells, y_wells):
 
 # данные для скважин скважины
 wells = [
-    Well(3550, 2500, 1.5, 800, 1),
+    Well(3560, 2500, 1.5, 800, 1),
     Well(250, 2000, 1.5, 1000, 2),
     Well(1700, 2200, 1.5, -700, 3),
     Well(300, 1000, 1.5, -400, 4),
@@ -48,9 +48,25 @@ pressure_start[:, 0] = 0
 pressure_start[:, -1] = 0
 pressure = pressure_start.copy()
 permeability_matrix = np.full((Nx, Ny), permeability)
+permeability_matrix[:Nx//2, :] = permeability * 2
+
+#  Тут можно создать рандомный разброс индексов
+# half_elements = (Nx * Ny) // 2
+# indices = np.random.choice(Nx * Ny, half_elements, replace=False)
+# permeability_matrix.flat[indices] = permeability * 2
+
 coef_matrix = B * viscosity / 2 / np.pi / permeability_matrix / h
 eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
 print(eta_matrix.mean())
+
+plt.figure()
+plt.title('Распределение проницаемости')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.pcolormesh(X, Y, permeability_matrix)
+plt.colorbar()
+plt.show()
+
 
 
 begin = t.time()
@@ -64,9 +80,9 @@ print(t.time() - begin)
 fig, ax = plt.subplots(figsize=(8, 6), gridspec_kw={'hspace': 0})
 for well in wells:
     ax.plot(well.time_well, well.pressure_well)
-ax.set_xlabel('Время')
+ax.set_xlabel('Время, сут')
 ax.set_title('Явный')
-ax.set_ylabel('Давление на забоях скважин')
+ax.set_ylabel('Давление на забоях скважин, Бар')
 ax.legend([f' {well.number} скважина c дебитом {well.q} ' for well in wells])
 plt.show()
 
@@ -74,7 +90,7 @@ plt.show()
 plt.style.use('dark_background')
 fig, ax = plt.subplots(figsize=(8, 6))
 cax = ax.pcolormesh(X, Y, pressure, shading='auto', cmap='viridis')
-cbar = plt.colorbar(cax, label='Давление')
+cbar = plt.colorbar(cax, label='Изменение давления, бар')
 ax.set_title(f'Распределение давления через {T} дней')
 ax.set_xlabel('X')
 ax.set_ylabel('Y')

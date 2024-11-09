@@ -22,24 +22,20 @@ def solve_for_one_well_explicit(X, Y, x_w, y_w, q, r_w, coef, pressure_start, T,
     dt = 1 / (2 * eta.mean() * (dx ** 2 + dy ** 2)) * dx ** 2 * dy ** 2  # шаг по времени в сутках c учетом устойчивости
     if 50 < dt < T: dt = T // (50 * 12)
 
-    time = []
+    time = np.linspace(int(dt), T + int(dt), int(T / dt))
     a, b = np.where(X == 0), np.where(Y == 0)
-    period = np.linspace(int(dt), T + int(dt), int(T / dt))
 
-    for t in period:
-        time.append(t)
+    for t in time:
         p_new = pressure_start.copy()
-        for i in range(1, N_x - 1):
-            for j in range(1, N_y - 1):
-                p_new[i, j] = pressure_start[i, j] + eta[i, j] * dt * (
-                        (pressure_start[i + 1, j] - 2 * pressure_start[i, j] + pressure_start[i - 1, j]) / dx ** 2 +
-                        (pressure_start[i, j + 1] - 2 * pressure_start[i, j] + pressure_start[i, j - 1]) / dy ** 2
-                )
+        p_new[1:-1, 1:-1] = pressure_start[1:-1, 1:-1] + eta[1:-1, 1:-1] * dt * (
+            (pressure_start[2:, 1:-1] - 2 * pressure_start[1:-1, 1:-1] + pressure_start[:-2, 1:-1]) / dx ** 2 +
+            (pressure_start[1:-1, 2:] - 2 * pressure_start[1:-1, 1:-1] + pressure_start[1:-1, :-2]) / dy ** 2
+        )
 
         pressure_start = well_boundary_condition(X, Y, p_new, q, coef, N_x, N_y, r_w)
-        pressure_w.append(pressure_start[int(a[0]), int(b[0])])
+        pressure_w.append(pressure_start[int(a[0]), int(b[0])]/10000)
 
-    return pressure_start, pressure_w, time
+    return pressure_start/10000, pressure_w, time
 
 
 # def solve_for_one_well_explicit(X, Y, x_w, y_w, q, r_w, coef_matrix, pressure_start, T, eta_matrix):
