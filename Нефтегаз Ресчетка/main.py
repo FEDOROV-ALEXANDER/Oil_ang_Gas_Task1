@@ -1,22 +1,24 @@
-import numpy as np
-from Solve import solve_for_one_well_explicit, aboba
+from Solve import solve_for_one_well_explicit
 import matplotlib.pyplot as plt
 import math as m
 from well import Well
+import numpy as np
 import seaborn as sns
-
+import time as t
 
 def choose_step(length, width, x_wells, y_wells):
-    dx, dy = m.gcd(length, *x_wells), m.gcd(width, *y_wells)
+    dx = dy = min(m.gcd(length, *x_wells), m.gcd(width, *y_wells))
     return dx, dy
+
 
 
 # данные для скважин скважины
 wells = [
-    Well(2550, 2550, 1.5, 10, 1),
-    Well(3700, 750, 1.5, 8, 2),
-    Well(255, 755, 1.5, -14, 3),
-    Well(1000, 3700, 1.5, -14, 4),
+    Well(3550, 2500, 1.5, 800, 1),
+    Well(250, 2000, 1.5, 1000, 2),
+    Well(1700, 2200, 1.5, -700, 3),
+    Well(300, 1000, 1.5, -400, 4),
+
 ]
 
 
@@ -27,17 +29,17 @@ dx, dy = choose_step(length, width, [well.x_w for well in wells],
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
-T = 10 * 365
+T =  365  # время работы в секундах
 
 B = 1.2  # Объемный коэффициент
 h = 10  # толщина пласта
 
 # параметры взяты плюс-минус от балды
-viscosity = 10  # Вязкость [сПз] = 10e-3 [Па * с]
-compressibility = 5 * 10e-9  # [1/Па] сжимаемость
-permeability = 100  # [мД] проницаемость - скаляр
-eta = 1.0
-coef = - B * viscosity / 2 / np.pi / permeability / h  # вспомогательный коэффициент
+viscosity = 10 * 10e-7 / 24 /60 /60  # Вязкость [Бар * сут]
+compressibility = 5 * 10e-5  # [1/Бар] сжимаемость
+permeability = 100 * 10e-16  # [м2] проницаемость
+porosity = 0.05
+eta = permeability/ (porosity * compressibility * viscosity)
 
 pressure_start = np.full((Nx, Ny), 0.0)
 pressure_start[0, :] = 0
@@ -45,17 +47,18 @@ pressure_start[-1, :] = 0
 pressure_start[:, 0] = 0
 pressure_start[:, -1] = 0
 pressure = pressure_start.copy()
+permeability_matrix = np.full((Nx, Ny), permeability)
+coef_matrix = B * viscosity / 2 / np.pi / permeability_matrix / h
+eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
+print(eta_matrix.mean())
 
 
+begin = t.time()
 for well in wells:
     # Используем явный метод
-    well.pressure_field, well.pressure_well, well.time_well = solve_for_one_well_explicit(X.copy(), Y.copy(), well.x_w,
-                                                                                          well.y_w, well.q, well.r_w,
-                                                                                          coef, pressure_start.copy(),
-                                                                                          T, eta)
-
+    well.pressure_field, well.pressure_well, well.time_well = solve_for_one_well_explicit(X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
     pressure += well.pressure_field
-
+print(t.time() - begin)
 
 
 fig, ax = plt.subplots(figsize=(8, 6), gridspec_kw={'hspace': 0})
@@ -64,11 +67,11 @@ for well in wells:
 ax.set_xlabel('Время')
 ax.set_title('Явный')
 ax.set_ylabel('Давление на забоях скважин')
-
 ax.legend([f' {well.number} скважина c дебитом {well.q} ' for well in wells])
 plt.show()
 
-
+#for style in plt.style.available == dark_background:
+plt.style.use('dark_background')
 fig, ax = plt.subplots(figsize=(8, 6))
 cax = ax.pcolormesh(X, Y, pressure, shading='auto', cmap='viridis')
 cbar = plt.colorbar(cax, label='Давление')
@@ -77,3 +80,4 @@ ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_title('Явный')
 plt.show()
+print("nvnn")
