@@ -1,5 +1,5 @@
 import numpy as np
-from Solve import solve_for_one_well_explicit
+from Solve import solve_for_one_well_explicit, aboba
 import matplotlib.pyplot as plt
 import math as m
 from well import Well
