@@ -1,14 +1,9 @@
 import numpy as np
-from sympy.physics.units import pressure
-
-from Solve import solve_for_one_well_implicit, solve_for_one_well_explicit
+from Solve import solve_for_one_well_explicit
 import matplotlib.pyplot as plt
 import math as m
 from well import Well
 import seaborn as sns
-
-
-# TODO теперь надо постараться реализовать для нескольких скважин
 
 
 def choose_step(length, width, x_wells, y_wells):
@@ -28,19 +23,19 @@ wells = [
 # Ввод входных значений
 length, width = 4000, 4000  # [м] геометрические размеры рассчитываемой области
 dx, dy = choose_step(length, width, [well.x_w for well in wells],
-                     [well.x_w for well in wells])  # [м] шаг по направлениям
+                     [well.y_w for well in wells])  # [м] шаг по направлениям
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
-T = 50 * 365
+T = 10 * 365
 
-B = 5  # Объемный коэффициент
-h = 20  # толщина пласта
+B = 1.2  # Объемный коэффициент
+h = 10  # толщина пласта
 
 # параметры взяты плюс-минус от балды
-viscosity = 1  # Вязкость [сПз] = 10e-3 [Па * с]
+viscosity = 10  # Вязкость [сПз] = 10e-3 [Па * с]
 compressibility = 5 * 10e-9  # [1/Па] сжимаемость
-permeability = 1  # [мД] проницаемость - скаляр
+permeability = 100  # [мД] проницаемость - скаляр
 eta = 1.0
 coef = - B * viscosity / 2 / np.pi / permeability / h  # вспомогательный коэффициент
 
