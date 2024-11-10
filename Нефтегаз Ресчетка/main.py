@@ -14,10 +14,10 @@ def choose_step(length, width, x_wells, y_wells):
 
 # данные для скважин скважины
 wells = [
-    Well(1000, 1725, 1.5, 800, 1),
-    Well(750, 1500, 1.5, 1000, 2),
-    Well(1000, 1000, 1.5, -700, 3),
-    Well(1700, 1700, 1.5, -400, 4),
+    Well(1000, 1000, 1.5, 800, 1),
+    Well(1705, 1500, 1.5, 1000, 2),
+    Well(2100, 1200, 1.5, -700, 3),
+    Well(600, 2000, 1.5, -400, 4),
 
 ]
 
@@ -28,7 +28,7 @@ dx, dy = choose_step(length, width, [well.x_w for well in wells],
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
-T = 365 * 10  # время работы в сутках
+T = 365 * 20  # время работы в сутках
 
 B = 1.2  # Объемный коэффициент
 h = 10  # толщина пласта
