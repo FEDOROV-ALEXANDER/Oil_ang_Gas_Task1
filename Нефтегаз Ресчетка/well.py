@@ -1,6 +1,10 @@
 import numpy as np
 
 
+
+
+
+
 class Well:
     def __init__(self, x_w, y_w, r_w, q, number):
         self.x_w = x_w  # координата скважины по х
@@ -25,3 +29,5 @@ class Well:
         Возвращает строковое представление объекта Скважина для отладки.
         """
         return self.__str__()
+
+

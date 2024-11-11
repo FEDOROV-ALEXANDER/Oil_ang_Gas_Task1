@@ -1,6 +1,8 @@
 import numpy as np
 
 
+
+
 def well_boundary_condition(X, Y, p, q, coef, N_x, N_y, r_w):
     for i in range(N_x):
         for j in range(N_y):
@@ -44,3 +46,4 @@ def solve_for_one_well_explicit(X, Y, x_w, y_w, q, r_w, coef, pressure_start, T,
         productivity.append(q / pressure_start[int(a[0]), int(b[0])] * 10000)
         history.append(pressure_start / 10000)
     return pressure_start / 10000, pressure_w, productivity, time, history
+
