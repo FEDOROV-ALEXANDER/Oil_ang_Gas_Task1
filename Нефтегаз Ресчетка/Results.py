@@ -29,7 +29,6 @@ def pressure_result(X, Y, pressure):
     ax.set_title(f'Распределение давления')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
-    ax.set_title('Явный')
     plt.savefig('results files/результат_давление.png', dpi=1000)
     plt.show()
 

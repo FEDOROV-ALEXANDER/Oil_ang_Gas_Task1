@@ -10,9 +10,7 @@
 
 Уравнение пьезопроводности в двумерной постановке имеет вид:
 
-$
-\frac{\partial p}{\partial t} = \eta \left( \frac{\partial^2 p}{\partial x^2} + \frac{\partial^2 p}{\partial y^2} \right)
-$
+!https://latex.codecogs.com/svg.latex?%5Cfrac%7B%5Cpartial%20p%7D%7B%5Cpartial%20t%7D%20%3D%20%5Ceta%20%5Cleft(%20%5Cfrac%7B%5Cpartial%5E2%20p%7D%7B%5Cpartial%20x%5E2%7D%20%2B%20%5Cfrac%7B%5Cpartial%5E2%20p%7D%7B%5Cpartial%20y%5E2%7D%20%5Cright)
 
 где:
 - $ p $ - давление в пласте,
@@ -105,10 +103,10 @@ $
 ### Примеры изображений
 
 Здесь можно добавить примеры изображений, полученных в результате работы программы.
-![img.png](img.png)
-![img_1.png](img_1.png)
-![img_2.png](img_2.png)
-![img_3.png](img_3.png)
+![проницаемость.png](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2F%D0%BF%D1%80%D0%BE%D0%BD%D0%B8%D1%86%D0%B0%D0%B5%D0%BC%D0%BE%D1%81%D1%82%D1%8C.png)
+![результат_давление.png](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2F%D1%80%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82_%D0%B4%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5.png)
+![давление_забой.png](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2F%D0%B4%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B7%D0%B0%D0%B1%D0%BE%D0%B9.png)
+![продуктивность.png](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2F%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%82%D0%B8%D0%B2%D0%BD%D0%BE%D1%81%D1%82%D1%8C.png)
 ---
 
 **Примечание**: Для корректной работы программы убедитесь, что все необходимые библиотеки установлены. Для установки зависимостей можно использовать команду:
@@ -116,9 +114,3 @@ $
 ```bash
 pip install numpy pandas matplotlib 
 ```
-
----
-
-**Автор**: [Ваше имя]
-
-**Дата**: [Дата]
