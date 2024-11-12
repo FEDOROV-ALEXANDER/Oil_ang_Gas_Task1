@@ -1,5 +1,4 @@
 from Solve import solve_for_one_well_explicit
-import matplotlib.pyplot as plt
 import math as m
 from well import Well
 import numpy as np
@@ -8,17 +7,17 @@ import Results as r
 
 
 def choose_step(length, width, x_wells, y_wells):
-    dx = dy = min(m.gcd(length, *x_wells), m.gcd(width, *y_wells))
-    return dx, dy
+    step = m.gcd(length, *x_wells), m.gcd(width, *y_wells)
+    step = m.gcd(step[0], step[1])
+    return step, step
 
 
 # данные для скважин скважины
 wells = [
     Well(1000, 1000, 1.5, 800, 1),
-    Well(1705, 1500, 1.5, 1000, 2),
-    Well(2100, 1200, 1.5, -700, 3),
-    Well(600, 2000, 1.5, -400, 4),
-
+    Well(1710, 1700, 1.5, 1000, 2),
+    Well(2100, 1020, 1.5, -700, 3),
+    Well(800, 1800, 1.5, -800, 4),
 ]
 
 # Ввод входных значений
@@ -28,7 +27,7 @@ dx, dy = choose_step(length, width, [well.x_w for well in wells],
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
-T = 365 * 20  # время работы в сутках
+T = 365 * 5  # время работы в сутках
 
 B = 1.2  # Объемный коэффициент
 h = 10  # толщина пласта
@@ -56,18 +55,8 @@ permeability_matrix[:Nx // 2, :] = permeability * 2
 
 coef_matrix = B * viscosity / 2 / np.pi / permeability_matrix / h
 eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
-print(eta_matrix.mean())
 
-plt.style.use('dark_background')
-plt.figure()
-plt.title('Распределение проницаемости')
-plt.xlabel('x')
-plt.ylabel('y')
-plt.pcolormesh(X, Y, permeability_matrix)
-plt.colorbar()
-plt.show()
 
-begin = t.time()
 for well in wells:
     history = []
     # Используем явный метод
@@ -75,8 +64,10 @@ for well in wells:
         X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
     pressure += well.pressure_field
     history += well.history
-print(t.time() - begin)
 
+
+# r.save_data(history, wells)
+r.permeability(X, Y, permeability_matrix, wells)
 r.pressure_on_wells(wells)
 r.productivity(wells)
 r.pressure_result(X, Y, pressure)
