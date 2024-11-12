@@ -1,8 +1,31 @@
-# Default ignored files
-/../../Нефтегаз Ресчетка /.idea/shelf/
-/../../Нефтегаз Ресчетка /.idea/workspace.xml
-# Editor-based HTTP Client requests
-/../../Нефтегаз Ресчетка /.idea/httpRequests/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDEs and editors
+.idea/
+.vscode/
+*.iml
+*.log
+*.tmp
+*.swp
+*.bak
+
 # Datasource local storage ignored files
-/../../Нефтегаз Ресчетка /.idea/dataSources/
-/../../Нефтегаз Ресчетка /.idea/dataSources.local.xml
+.idea/dataSources/
+.idea/dataSources.local.xml
+
+# Editor-based HTTP Client requests
+.idea/httpRequests/
+
+# Specific files
+.idea/shelf/
+.idea/workspace.xml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
