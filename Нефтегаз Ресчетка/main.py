@@ -1,4 +1,4 @@
-from Solve import solve_for_one_well_explicit, torch_solve_for_one_well_explicit
+from Solve import  solve_for_one_well_explicit
 import math as m
 from well import Well
 import numpy as np
@@ -10,7 +10,7 @@ import Results as r
 # TODO переписать функции решения в метод класса, потому что так удобнее наверное будет
 # TODO попробовать поковыряться с сеткой, в том числе метод Форчуна
 # TODO справить main файл и в результатах
-# TODO посмотреть методы метода покоординатного расщепления.метод переменных направлений,метод  продольнопоперечных  прогонок,метод ПисмэнаРэчфорда Вержибицкий 756
+
 
 
 def choose_step(length, width, x_wells, y_wells):
@@ -21,9 +21,9 @@ def choose_step(length, width, x_wells, y_wells):
 
 # данные для скважин скважины
 wells = [
-    Well(1000, 1000, 1.5, 800, 1),
-    Well(1750, 1700, 1.5, 1000, 2),
-    Well(2100, 1050, 1.5, -700, 3),
+    Well(1000, 1000, 1.5, 1100, 1),
+    Well(1710, 1705, 1.5, 1000, 2),
+    Well(2100, 1050, 1.5, -1000, 3),
     Well(800, 1800, 1.5, -800, 4),
 ]
 
@@ -34,7 +34,7 @@ dx, dy = choose_step(length, width, [well.x_w for well in wells],
 Nx, Ny = int(length / dx) + 1, int(width / dy) + 1  # количество элементов
 X = np.linspace(0, length, Nx)
 Y = np.linspace(0, width, Ny)
-T = 365 * 5  # время работы в сутках
+T = 365 * 2  # время работы в сутках
 
 B = 1.2  # Объемный коэффициент
 h = 10  # толщина пласта
@@ -63,47 +63,18 @@ permeability_matrix[:Nx // 2, :] = permeability * 2
 coef_matrix = B * viscosity / 2 / np.pi / permeability_matrix / h
 eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
 
-# for well in wells:
-#     history = []
-#     # Используем явный метод
-#     well.pressure_field, well.pressure_well, well.productivity, well.time_well, well.history = solve_for_one_well_implicit(
-#         X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
-#     pressure += well.pressure_field
-#     history += well.history
-#
-# # r.save_data(history, wells)
-# r.permeability(X, Y, permeability_matrix, wells)
-# r.pressure_on_wells(wells)
-# r.productivity(wells)
-# r.pressure_result(X, Y, pressure)
-
-
-pressure_ = pressure_start.copy()
-
-begin = t.time()
 for well in wells:
+    history = []
     # Используем явный метод
     well.pressure_field, well.pressure_well, well.productivity, well.time_well, well.history = solve_for_one_well_explicit(
         X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
-    pressure_ += well.pressure_field
-print("explicit", t.time() - begin)
-
-
-r.pressure_on_wells(wells)
-r.productivity(wells)
-r.pressure_result(X, Y, pressure_)
-
-begin = t.time()
-for well in wells:
-    # Используем явный метод
-    well.pressure_field, well.pressure_well, well.productivity, well.time_well, well.history = torch_solve_for_one_well_explicit(
-        X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
     pressure += well.pressure_field
-print("torch", t.time() - begin)
+    history += well.history
 
+# r.save_data(history, wells)
 r.permeability(X, Y, permeability_matrix, wells)
 r.pressure_on_wells(wells)
 r.productivity(wells)
 r.pressure_result(X, Y, pressure)
 
-r.pressure_result(X, Y, abs(pressure - pressure_))
+

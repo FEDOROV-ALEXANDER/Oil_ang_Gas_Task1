@@ -16,7 +16,7 @@ def permeability(X, Y, permeability_matrix, wells):
         else:
             plt.scatter(well.x_w, well.y_w, marker='v', color='black', s=50)
     plt.colorbar()
-    # plt.savefig('results files/проницаемость.png', dpi=1000)
+    plt.savefig('results files/проницаемость.png', dpi=1000)
     plt.show()
 
 
@@ -29,7 +29,7 @@ def pressure_result(X, Y, pressure):
     ax.set_title(f'Распределение давления')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
-    # plt.savefig('results files/результат_давление.png', dpi=1000)
+    plt.savefig('results files/результат_давление.png', dpi=1000)
     plt.show()
 
 
@@ -45,7 +45,7 @@ def pressure_on_wells(wells):
     ax.set_title('Давление на забоях скважины')
     ax.set_ylabel('Давление на забоях скважин, Бар')
     ax.legend([f' {well.number} скважина c дебитом {well.q} ' for well in wells])
-    # plt.savefig('results files/давление_забой.png', dpi=1000)
+    plt.savefig('results files/давление_забой.png', dpi=1000)
     plt.show()
 
 
@@ -62,7 +62,7 @@ def productivity(wells):
     ax.legend(labels)
     ax.set_xlabel('Время, сут')
     ax.set_ylabel('Продуктивность, м3/Бар')
-    # plt.savefig('results files/продуктивность.png', dpi=1000)
+    plt.savefig('results files/продуктивность.png', dpi=1000)
     plt.show()
 
 
