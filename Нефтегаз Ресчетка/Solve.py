@@ -1,7 +1,5 @@
 import numpy as np
 import torch
-from scipy.sparse import diags
-from scipy.sparse.linalg import spsolve
 
 
 def well_boundary_condition(X, Y, p, q, coef, N_x, N_y, r_w):

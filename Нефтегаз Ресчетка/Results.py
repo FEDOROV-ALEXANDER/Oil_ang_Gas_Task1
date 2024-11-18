@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from PIL import Image
+import imageio
+from pathlib import Path
+import glob
 
 
 def permeability(X, Y, permeability_matrix, wells):
@@ -26,7 +30,7 @@ def pressure_result(X, Y, pressure):
     fig, ax = plt.subplots(figsize=(8, 6))
     cax = ax.pcolormesh(X, Y, pressure, shading='auto', cmap='viridis')
     cbar = plt.colorbar(cax, label='Изменение давления, бар')
-    ax.set_title(f'Распределение давления')
+    ax.set_title(f'Итоговое распределение давления')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     plt.savefig('results files/результат_давление.png', dpi=1000)
@@ -66,22 +70,7 @@ def productivity(wells):
     plt.show()
 
 
-# Проход по каждому массиву в history
-def save_data(history, wells):
-    data = []
-    for i, array in enumerate(history):
-        # Развертывание каждого двумерного массива в одномерный
-        flattened_array = array.flatten()
-        # Добавление номера массива и его размеров
-        array_with_index = np.insert(flattened_array, 0, [i, array.shape[0], array.shape[1]])
-        # Добавление в общий список
-        data.append(array_with_index)
-
-    # Создание DataFrame
-    df = pd.DataFrame(data)
-
-    df.to_excel('results files/history_field_pressure.xlsx', index=False)
-
+def save_data(wells):
     wells_df = []
     for well in wells:
         well_df = pd.DataFrame({
@@ -94,3 +83,37 @@ def save_data(history, wells):
     combinet_df = pd.concat(wells_df, ignore_index=True)
 
     combinet_df.to_excel('results files/well_information.xlsx', index=False)
+
+
+def pictures_for_gif(wells, X, Y):
+    well = wells[0]
+    history_summ_yield = np.zeros((well.pressure_field.shape[0], well.pressure_field.shape[1]))
+    print(len(well.time_well),round(len(well.time_well)/19), well.time_well[1]-well.time_well[0])
+    # TODO возможно надо добавлять еще 1 к длине, чтобы последний попадал
+    numbers = [round(i * (len(well.time_well)-1)/19) for i in range(20)]
+    for number in numbers:
+        for well in wells:
+            history_summ_yield += well.history[number]
+        plt.style.use('dark_background')
+        fig, ax = plt.subplots(figsize=(8, 6))
+        cax = ax.pcolormesh(X, Y, history_summ_yield, shading='auto', cmap='viridis')
+        cbar = plt.colorbar(cax, label='Изменение давления, бар')
+        ax.set_title(f'Распределение давления через {int(number)} дней')
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        plt.savefig(f'results files/for gif pictures/давление {number} дни.png', dpi=1000)
+        plt.close()
+    return numbers
+
+
+def gif_creating( wells, X, Y):
+    numbers = pictures_for_gif( wells, X, Y)
+    # image_paths = sorted(glob.glob('results files/for gif pictures/*.png'))
+    count = len(glob.glob('results files/for gif pictures/*.png'))
+    list=[]
+    for i in numbers:
+        list.append('results files/for gif pictures/' + 'давление '+str(i) + ' дни.png')
+    with imageio.get_writer('results files/pressure_evolution.gif', mode='I', fps=1) as writer:
+        for img in list:
+            with Image.open(img) as im:
+                writer.append_data(np.array(im))

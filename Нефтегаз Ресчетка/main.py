@@ -2,7 +2,6 @@ from Solve import  solve_for_one_well_explicit
 import math as m
 from well import Well
 import numpy as np
-import time as t
 import Results as r
 
 
@@ -22,8 +21,8 @@ def choose_step(length, width, x_wells, y_wells):
 # данные для скважин скважины
 wells = [
     Well(1000, 1000, 1.5, 1100, 1),
-    Well(1710, 1705, 1.5, 1000, 2),
-    Well(2100, 1050, 1.5, -1000, 3),
+    Well(1720, 1700, 1.5, 1000, 2),
+    Well(2100, 1000, 1.5, -1000, 3),
     Well(800, 1800, 1.5, -800, 4),
 ]
 
@@ -52,6 +51,7 @@ pressure_start[-1, :] = 0
 pressure_start[:, 0] = 0
 pressure_start[:, -1] = 0
 pressure = pressure_start.copy()
+
 permeability_matrix = np.full((Nx, Ny), permeability)
 permeability_matrix[:Nx // 2, :] = permeability * 2
 
@@ -71,10 +71,12 @@ for well in wells:
     pressure += well.pressure_field
     history += well.history
 
-# r.save_data(history, wells)
+
 r.permeability(X, Y, permeability_matrix, wells)
 r.pressure_on_wells(wells)
 r.productivity(wells)
 r.pressure_result(X, Y, pressure)
+r.save_data(wells)
+r.gif_creating(wells, X, Y)
 
 
