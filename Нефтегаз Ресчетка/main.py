@@ -1,4 +1,4 @@
-from Solve import solve_for_one_well_explicit, solve_for_one_well_implicit
+from Solve import solve_for_one_well_explicit, solve_for_one_well_crank_nicolson
 import math as m
 from well import Well
 import numpy as np
@@ -80,7 +80,7 @@ eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
 begin = t.time()
 for well in wells:
     # Используем явный метод
-    well.pressure_field, well.pressure_well, well.productivity, well.time_well, well.history = solve_for_one_well_implicit(
+    well.pressure_field, well.pressure_well, well.productivity, well.time_well, well.history = solve_for_one_well_crank_nicolson(
         X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
     pressure += well.pressure_field
 print("implicit", t.time() - begin)
