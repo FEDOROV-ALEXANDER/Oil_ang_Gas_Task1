@@ -3,8 +3,7 @@ import pandas as pd
 import numpy as np
 from PIL import Image
 import imageio
-from pathlib import Path
-import glob
+
 
 
 def permeability(X, Y, permeability_matrix, wells):
@@ -35,9 +34,6 @@ def pressure_result(X, Y, pressure):
     ax.set_ylabel('Y')
     plt.savefig('results files/результат_давление.png', dpi=1000)
     plt.show()
-
-
-# def pressure_history():
 
 
 def pressure_on_wells(wells):
@@ -88,9 +84,8 @@ def save_data(wells):
 def pictures_for_gif(wells, X, Y):
     well = wells[0]
     history_summ_yield = np.zeros((well.pressure_field.shape[0], well.pressure_field.shape[1]))
-    print(len(well.time_well),round(len(well.time_well)/19), well.time_well[1]-well.time_well[0])
-    # TODO возможно надо добавлять еще 1 к длине, чтобы последний попадал
-    numbers = [round(i * (len(well.time_well)-1)/19) for i in range(20)]
+    print(len(well.time_well), round(len(well.time_well) / 19), well.time_well[1] - well.time_well[0])
+    numbers = [round(i * (len(well.time_well) - 1) / 19) for i in range(20)]
     for number in numbers:
         for well in wells:
             history_summ_yield += well.history[number]
@@ -106,13 +101,11 @@ def pictures_for_gif(wells, X, Y):
     return numbers
 
 
-def gif_creating( wells, X, Y):
-    numbers = pictures_for_gif( wells, X, Y)
-    # image_paths = sorted(glob.glob('results files/for gif pictures/*.png'))
-    count = len(glob.glob('results files/for gif pictures/*.png'))
-    list=[]
+def gif_creating(wells, X, Y):
+    numbers = pictures_for_gif(wells, X, Y)
+    list = []
     for i in numbers:
-        list.append('results files/for gif pictures/' + 'давление '+str(i) + ' дни.png')
+        list.append('results files/for gif pictures/' + 'давление ' + str(i) + ' дни.png')
     with imageio.get_writer('results files/pressure_evolution.gif', mode='I', fps=1) as writer:
         for img in list:
             with Image.open(img) as im:
