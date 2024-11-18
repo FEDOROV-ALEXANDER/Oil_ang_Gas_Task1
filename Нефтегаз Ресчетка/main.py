@@ -1,9 +1,10 @@
-from Solve import solve_for_one_well_explicit, solve_for_one_well_crank_nicolson
+from Solve import solve_for_one_well_explicit, torch_solve_for_one_well_explicit
 import math as m
 from well import Well
 import numpy as np
 import time as t
 import Results as r
+
 
 
 # TODO переписать функции решения в метод класса, потому что так удобнее наверное будет
@@ -21,8 +22,8 @@ def choose_step(length, width, x_wells, y_wells):
 # данные для скважин скважины
 wells = [
     Well(1000, 1000, 1.5, 800, 1),
-    Well(1720, 1700, 1.5, 1000, 2),
-    Well(2100, 1020, 1.5, -700, 3),
+    Well(1750, 1700, 1.5, 1000, 2),
+    Well(2100, 1050, 1.5, -700, 3),
     Well(800, 1800, 1.5, -800, 4),
 ]
 
@@ -77,18 +78,6 @@ eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
 # r.pressure_result(X, Y, pressure)
 
 
-begin = t.time()
-for well in wells:
-    # Используем явный метод
-    well.pressure_field, well.pressure_well, well.productivity, well.time_well, well.history = solve_for_one_well_crank_nicolson(
-        X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
-    pressure += well.pressure_field
-print("implicit", t.time() - begin)
-
-r.permeability(X, Y, permeability_matrix, wells)
-r.pressure_on_wells(wells)
-r.productivity(wells)
-r.pressure_result(X, Y, pressure)
 pressure_ = pressure_start.copy()
 
 begin = t.time()
@@ -103,4 +92,18 @@ print("explicit", t.time() - begin)
 r.pressure_on_wells(wells)
 r.productivity(wells)
 r.pressure_result(X, Y, pressure_)
+
+begin = t.time()
+for well in wells:
+    # Используем явный метод
+    well.pressure_field, well.pressure_well, well.productivity, well.time_well, well.history = torch_solve_for_one_well_explicit(
+        X.copy(), Y.copy(), well.x_w, well.y_w, well.q, well.r_w, coef_matrix, pressure_start.copy(), T, eta_matrix)
+    pressure += well.pressure_field
+print("torch", t.time() - begin)
+
+r.permeability(X, Y, permeability_matrix, wells)
+r.pressure_on_wells(wells)
+r.productivity(wells)
+r.pressure_result(X, Y, pressure)
+
 r.pressure_result(X, Y, abs(pressure - pressure_))
