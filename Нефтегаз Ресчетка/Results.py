@@ -85,14 +85,16 @@ def pictures_for_gif(wells, X, Y):
     history_summ_yield = np.zeros((well.pressure_field.shape[0], well.pressure_field.shape[1]))
     print(len(well.time_well), round(len(well.time_well) / 19), well.time_well[1] - well.time_well[0])
     numbers = [round(i * (len(well.time_well) - 1) / 19) for i in range(20)]
+
     for number in numbers:
+        print(int(well.time_well[number]),number)
         for well in wells:
             history_summ_yield += well.history[number]
         plt.style.use('dark_background')
         fig, ax = plt.subplots(figsize=(8, 6))
         cax = ax.pcolormesh(X, Y, history_summ_yield, shading='auto', cmap='viridis')
         cbar = plt.colorbar(cax, label='Изменение давления, бар')
-        ax.set_title(f'Распределение давления через {int(number)} дней')
+        ax.set_title(f'Распределение давления через {int(well.time_well[number])} дней')
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         plt.savefig(f'results files/for gif pictures/давление {number} дни.png', dpi=1000)

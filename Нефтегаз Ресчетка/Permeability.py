@@ -4,7 +4,7 @@ import random
 
 def generate_permeability_matrix(X, Y, permeability, type_number):
     Nx, Ny = len(X), len(Y)
-    # np.random.seed(0)
+    np.random.seed(0)
     permeability_matrix = np.full((Nx, Ny), permeability)
 
     if type_number == 1:
