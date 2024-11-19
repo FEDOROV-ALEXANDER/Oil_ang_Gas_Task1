@@ -1,8 +1,10 @@
 import numpy as np
 import random
 
+
 def generate_permeability_matrix(X, Y, permeability, type_number):
     Nx, Ny = len(X), len(Y)
+    # np.random.seed(0)
     permeability_matrix = np.full((Nx, Ny), permeability)
 
     if type_number == 1:
@@ -10,14 +12,14 @@ def generate_permeability_matrix(X, Y, permeability, type_number):
         center_x, center_y = Nx // 2, Ny // 2
         square_size = 20
         permeability_matrix[center_x - square_size // 2:center_x + square_size // 2,
-                            center_y - square_size // 2:center_y + square_size // 2] = permeability * 2
+        center_y - square_size // 2:center_y + square_size // 2] = permeability * 2
     elif type_number == 2:
         # Круг
         center_x, center_y = Nx // 2, Ny // 2
         radius = 20
         for i in range(Nx):
             for j in range(Ny):
-                if (i - center_x)**2 + (j - center_y)**2 <= radius**2:
+                if (i - center_x) ** 2 + (j - center_y) ** 2 <= radius ** 2:
                     permeability_matrix[i, j] = permeability * 2
     elif type_number == 3:
         # Неровное что-то

@@ -1,4 +1,4 @@
-from Solve import  solve_for_one_well_explicit
+from Solve import solve_for_one_well_explicit
 import math as m
 from well import Well
 import numpy as np
@@ -6,11 +6,9 @@ import Results as r
 import Permeability
 
 
-
 # TODO переписать функции решения в метод класса, потому что так удобнее наверное будет
 # TODO попробовать поковыряться с сеткой, в том числе метод Форчуна
 # TODO справить main файл и в результатах
-
 
 
 def choose_step(length, width, x_wells, y_wells):
@@ -54,10 +52,8 @@ pressure_start[:, -1] = 0
 pressure = pressure_start.copy()
 permeability_matrix = Permeability.generate_permeability_matrix(X, Y, permeability, 3)
 
-
 coef_matrix = B * viscosity / 2 / np.pi / permeability_matrix / h
 eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
-#TODO исправить, скважины перепутаны х и у там где высчитывается давление. для проницаемости все хорошо
 for well in wells:
     history = []
     # Используем явный метод
@@ -66,12 +62,9 @@ for well in wells:
     pressure += well.pressure_field
     history += well.history
 
-
 r.permeability(X, Y, permeability_matrix, wells)
 r.pressure_on_wells(wells)
 r.productivity(wells)
 r.pressure_result(X, Y, pressure)
 r.save_data(wells)
 r.gif_creating(wells, X, Y)
-
-

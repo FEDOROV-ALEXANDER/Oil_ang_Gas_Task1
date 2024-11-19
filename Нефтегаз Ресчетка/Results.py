@@ -5,7 +5,6 @@ from PIL import Image
 import imageio
 
 
-
 def permeability(X, Y, permeability_matrix, wells):
     plt.style.use('dark_background')
     plt.figure()
