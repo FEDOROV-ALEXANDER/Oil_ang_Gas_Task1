@@ -3,6 +3,7 @@ import math as m
 from well import Well
 import numpy as np
 import Results as r
+import Permeability
 
 
 
@@ -21,9 +22,9 @@ def choose_step(length, width, x_wells, y_wells):
 # данные для скважин скважины
 wells = [
     Well(1000, 1000, 1.5, 1100, 1),
-    Well(1720, 1700, 1.5, 1000, 2),
-    Well(2100, 1000, 1.5, -1000, 3),
-    Well(800, 1800, 1.5, -800, 4),
+    Well(2000, 2000, 1.5, 1000, 2),
+    Well(300, 300, 1.5, -1000, 3),
+    Well(2250, 1800, 1.5, -800, 4),
 ]
 
 # Ввод входных значений
@@ -51,18 +52,12 @@ pressure_start[-1, :] = 0
 pressure_start[:, 0] = 0
 pressure_start[:, -1] = 0
 pressure = pressure_start.copy()
+permeability_matrix = Permeability.generate_permeability_matrix(X, Y, permeability, 3)
 
-permeability_matrix = np.full((Nx, Ny), permeability)
-permeability_matrix[:Nx // 2, :] = permeability * 2
-
-#  Тут можно создать рандомный разброс индексов
-# half_elements = (Nx * Ny) // 2
-# indices = np.random.choice(Nx * Ny, half_elements, replace=False)
-# permeability_matrix.flat[indices] = permeability * 2
 
 coef_matrix = B * viscosity / 2 / np.pi / permeability_matrix / h
 eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
-
+#TODO исправить, скважины перепутаны х и у там где высчитывается давление. для проницаемости все хорошо
 for well in wells:
     history = []
     # Используем явный метод
