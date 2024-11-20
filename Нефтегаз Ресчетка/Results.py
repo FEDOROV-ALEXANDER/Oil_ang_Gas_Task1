@@ -18,8 +18,9 @@ def permeability(X, Y, permeability_matrix, wells):
         else:
             plt.scatter(well.x_w, well.y_w, marker='v', color='black', s=50)
     plt.colorbar()
-    plt.savefig('results files/проницаемость.png', dpi=1000)
+    plt.savefig(f'results files/проницаемость.png', dpi=1000)
     plt.show()
+    plt.close()
 
 
 def pressure_result(X, Y, pressure):
@@ -33,6 +34,7 @@ def pressure_result(X, Y, pressure):
     ax.set_ylabel('Y')
     plt.savefig('results files/результат_давление.png', dpi=1000)
     plt.show()
+    plt.close()
 
 
 def pressure_on_wells(wells):
@@ -46,6 +48,7 @@ def pressure_on_wells(wells):
     ax.legend([f' {well.number} скважина c дебитом {well.q} ' for well in wells])
     plt.savefig('results files/давление_забой.png', dpi=1000)
     plt.show()
+    plt.close()
 
 
 def productivity(wells):
@@ -63,6 +66,7 @@ def productivity(wells):
     ax.set_ylabel('Продуктивность, м3/Бар')
     plt.savefig('results files/продуктивность.png', dpi=1000)
     plt.show()
+    plt.close()
 
 
 def save_data(wells):
@@ -80,21 +84,19 @@ def save_data(wells):
     combinet_df.to_excel('results files/well_information.xlsx', index=False)
 
 
-def pictures_for_gif(wells, X, Y):
+def pictures_for_gif(wells, X, Y, pressure_start):
     well = wells[0]
     history_summ_yield = np.zeros((well.pressure_field.shape[0], well.pressure_field.shape[1]))
-    print(len(well.time_well), round(len(well.time_well) / 19), well.time_well[1] - well.time_well[0])
     numbers = [round(i * (len(well.time_well) - 1) / 19) for i in range(20)]
 
     for number in numbers:
-        print(int(well.time_well[number]),number)
         for well in wells:
             history_summ_yield += well.history[number]
         plt.style.use('dark_background')
         fig, ax = plt.subplots(figsize=(8, 6))
-        cax = ax.pcolormesh(X, Y, history_summ_yield, shading='auto', cmap='viridis')
+        cax = ax.pcolormesh(X, Y, history_summ_yield - pressure_start, shading='auto', cmap='viridis')
         cbar = plt.colorbar(cax, label='Изменение давления, бар')
-        ax.set_title(f'Распределение давления через {int(well.time_well[number])} дней')
+        ax.set_title(f'Распределение изменения давления через {int(well.time_well[number])} дней')
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         plt.savefig(f'results files/for gif pictures/давление {number} дни.png', dpi=1000)
@@ -102,8 +104,8 @@ def pictures_for_gif(wells, X, Y):
     return numbers
 
 
-def gif_creating(wells, X, Y):
-    numbers = pictures_for_gif(wells, X, Y)
+def gif_creating(wells, X, Y, pressure_start):
+    numbers = pictures_for_gif(wells, X, Y, pressure_start)
     list = []
     for i in numbers:
         list.append('results files/for gif pictures/' + 'давление ' + str(i) + ' дни.png')

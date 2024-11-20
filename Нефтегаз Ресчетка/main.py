@@ -6,11 +6,6 @@ import Results as r
 import Permeability
 
 
-# TODO переписать функции решения в метод класса, потому что так удобнее наверное будет
-# TODO попробовать поковыряться с сеткой, в том числе метод Форчуна
-# TODO справить main файл и в результатах
-
-
 def choose_step(length, width, x_wells, y_wells):
     step = m.gcd(length, *x_wells), m.gcd(width, *y_wells)
     step = m.gcd(step[0], step[1])
@@ -19,10 +14,10 @@ def choose_step(length, width, x_wells, y_wells):
 
 # данные для скважин скважины
 wells = [
-    Well(525, 400, 1.5, 1100, 1),
-    Well(2000, 1500, 1.5, 1000, 2),
-    Well(600, 1410, 1.5, -1000, 3),
-    Well(2250, 2200, 1.5, -800, 4),
+    Well(525, 410, 1.5, 1100, 1),
+    Well(2000, 500, 1.5, -1000, 2),
+    Well(600, 1800, 1.5, -1000, 3),
+    Well(2250, 2200, 1.5, 1000, 4),
 ]
 
 # Ввод входных значений
@@ -50,8 +45,8 @@ pressure_start[-1, :] = 0
 pressure_start[:, 0] = 0
 pressure_start[:, -1] = 0
 pressure = pressure_start.copy()
-permeability_matrix = Permeability.generate_permeability_matrix(X, Y, permeability, 3)
 
+permeability_matrix = Permeability.generate_permeability_matrix(X, Y, permeability, 3)
 coef_matrix = B * viscosity / 2 / np.pi / permeability_matrix / h
 eta_matrix = permeability_matrix / (porosity * compressibility * viscosity)
 for well in wells:
@@ -65,6 +60,6 @@ for well in wells:
 r.permeability(X, Y, permeability_matrix, wells)
 r.pressure_on_wells(wells)
 r.productivity(wells)
-r.pressure_result(X, Y, pressure)
+r.pressure_result(X, Y, pressure - pressure_start)
 r.save_data(wells)
-r.gif_creating(wells, X, Y)
+r.gif_creating(wells, X, Y, pressure_start)

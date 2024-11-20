@@ -31,11 +31,8 @@ def solve_for_one_well_explicit(X, Y, x_w, y_w, q, r_w, coef, pressure_start, T,
 
     # Вычисление максимального шага по времени с учетом устойчивости
     dt = 1 / (3 * eta.max() * (dx ** 2 + dy ** 2)) * dx ** 2 * dy ** 2  # шаг по времени в сутках c учетом устойчивости
-
     time = np.arange(dt, T + dt, dt)
-
     a, b = np.where(X == 0), np.where(Y == 0)
-
     # Преобразуем массивы в тензоры
     pressure_start_tensor = torch.tensor(pressure_start, dtype=torch.float32)
     eta_tensor = torch.tensor(eta, dtype=torch.float32)
