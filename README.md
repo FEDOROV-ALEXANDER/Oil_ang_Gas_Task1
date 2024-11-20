@@ -119,7 +119,7 @@
 ### Картинки
 
 1. **Распределение проницаемости**:
-![проницаемость.png](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2F%D0%B4%D0%BB%D1%8F%20%D0%BE%D1%82%D1%87%D0%B5%D1%82%D0%B0%2F%D0%BF%D1%80%D0%BE%D0%BD%D0%B8%D1%86%D0%B0%D0%B5%D0%BC%D0%BE%D1%81%D1%82%D1%8C.png)
+    ![проницаемость.png](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2F%D0%B4%D0%BB%D1%8F%20%D0%BE%D1%82%D1%87%D0%B5%D1%82%D0%B0%2F%D0%BF%D1%80%D0%BE%D0%BD%D0%B8%D1%86%D0%B0%D0%B5%D0%BC%D0%BE%D1%81%D1%82%D1%8C.png)
 2. **Итоговое распределение давления**:
    ![результат_давление.png](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2F%D1%80%D0%B5%D0%B7%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%82_%D0%B4%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5.png)
 3. **Давление на забоях скважин**:
@@ -127,7 +127,7 @@
 4. **Продуктивность добывающих скважин**:
    ![продуктивность.png](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2F%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%82%D0%B8%D0%B2%D0%BD%D0%BE%D1%81%D1%82%D1%8C.png)
 ### GIF-анимация
-![pressure_evolution.gif](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2Fpressure_evolution.gif)
+    ![pressure_evolution.gif](%D0%9D%D0%B5%D1%84%D1%82%D0%B5%D0%B3%D0%B0%D0%B7%20%D0%A0%D0%B5%D1%81%D1%87%D0%B5%D1%82%D0%BA%D0%B0%2Fresults%20files%2Fpressure_evolution.gif)
               Эволюция распределения давления
 
 
