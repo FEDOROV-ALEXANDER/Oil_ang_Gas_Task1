@@ -1,19 +1,16 @@
 \documentclass{article}
 \usepackage{graphicx}
-\graphicspath{ {./results files/} }
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2.4cm]{geometry}
 \baselineskip=30 pt
 \usepackage[warn]{mathtext}
 \usepackage[T1, T2A]{fontenc}
 \usepackage[utf8]{inputenc}
-\usepackage[english,russian]{babel}
+\usepackage[russian, english]{babel}
 \usepackage{amssymb, amsmath}
 \usepackage{indentfirst}
-\usepackage{mathrsfs}
 \usepackage{booktabs}
 \usepackage[bottom]{footmisc}
-\usepackage[hidelinks]{hyperref}
-\pdfcompresslevel=9
+\usepackage[draft,hidelinks]{hyperref}
 \usepackage{float}
 \usepackage{physics}
 \DeclareGraphicsExtensions{.eps}
@@ -23,7 +20,7 @@
 \date{\today}
 
 \title{Решение задачи пьезопроводности в плоской постановке с неоднородностью в проницаемости}
-\author{Ваше имя}
+\author{Федоров Александр}
 \date{\today}
 
 \begin{document}
@@ -110,10 +107,11 @@ p(x, y, 0) = p_0,
 Программа состоит из нескольких модулей:
 
 \begin{itemize}
-    \item \textbf{main.py}: Основной скрипт, который инициализирует параметры модели, задает начальные и граничные условия, а также запускает расчет.
-    \item \textbf{Solve.py}: Содержит функцию \texttt{solve\_for\_one\_well\_explicit}, которая реализует явный метод конечных разностей для решения уравнения пьезопроводности для одной скважины.
-    \item \textbf{well.py}: Определяет класс \texttt{Well}, который представляет скважину с заданными параметрами (координаты, радиус, дебит и т.д.).
-    \item \textbf{Results.py}: Содержит функции для визуализации результатов расчета (распределение давления, проницаемости, продуктивности скважин и т.д.) и их сохранения.
+    \item \textbf{main.py}: Основной модуль, который инициализирует параметры задачи, создает объекты скважин, задает начальные условия и запускает процесс решения уравнения пьезопроводности.
+    \item \textbf{solve.py}: Модуль, содержащий функции для решения уравнения пьезопроводности методом конечных разностей. Включает в себя функции для применения граничных условий и явного метода решения.
+    \item \textbf{well.py}: Модуль, описывающий класс \texttt{Well}, который представляет собой скважину с заданными координатами, радиусом, дебитом и другими параметрами.
+    \item \textbf{results.py}: Модуль, отвечающий за визуализацию и сохранение результатов моделирования. Включает в себя функции для построения графиков распределения давления, проницаемости, продуктивности скважин, а также создания GIF-анимации.
+    \item \textbf{Permeability.py}: Модуль, отвечающий за генерацию матрицы проницаемости пласта с учетом различных типов неоднородности.
 \end{itemize}
 
 \section{Пример использования}
@@ -123,17 +121,17 @@ p(x, y, 0) = p_0,
 \begin{itemize}
     \item \textbf{Геометрические размеры рассчитываемой области}: 2500x2500 м.
     \item \textbf{Количество скважин}: 4.
-    \item \textbf{Дебиты скважин}: 800, 1000, -700, -800 м³/сут.
+    \item \textbf{Дебиты скважин}: 1100,-1000, -1000,1000 м³/сут.
     \item \textbf{Проницаемость}: $100 \times 10^{-16}$ м² (с неоднородностью).
     \item \textbf{Вязкость}: $10 \times 10^{-7}$ Па·с.
-    \item \textbf{Сжимаемость}: $5 \times 10^{-5}$ 1/Па.
+    \item \textbf{Сжимаемость}: $5 \times 10^{-5} $ 1/Па.
     \item \textbf{Пористость}: 0.05.
     \item \textbf{Объемный коэффициент}: 1.2.
     \item \textbf{Толщина пласта}: 10 м.
-    \item \textbf{Время работы}: 5 лет ($365 \times 5 $дней).
+    \item \textbf{Время работы}: 2 года ($365 \times 2 дней$).
 \end{itemize}
 
-\section{Результаты}
+\section{Данные}
 
 Результаты расчета сохраняются в файлы Excel и изображения:
 
@@ -146,36 +144,34 @@ p(x, y, 0) = p_0,
     \item \textbf{продуктивность.png}: Продуктивность добывающих скважин.
 \end{itemize}
 
-\section{Примеры изображений}
+\section{Результаты}
 
-Здесь можно добавить примеры изображений, полученных в результате работы программы.
-
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{проницаемость.png}
+    \includegraphics[width=1.1\textwidth]{проницаемость.png}
     \caption{Пример проницаемости пласта}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{результат_давление.png}
+    \includegraphics[width=1.1\textwidth]{результат_давление.png}
     \caption{Пример результирующего давления в пласте}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{давление_забой.png}
+    \includegraphics[width=1.1\textwidth]{давление_забой.png}
     \caption{Пример давлений на забоях скважин}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{продуктивность.png}
+    \includegraphics[width=1.1\textwidth]{продуктивность.png}
     \caption{Пример продуктивностей}
 \end{figure}
 
+\section*{Вывод}
 
-
-
+Решено уравнение пьезопроводности для данных условий в бесконечном пласте для системы из двух нагнетательных и двух добывающих скважин.
 
 \end{document}
