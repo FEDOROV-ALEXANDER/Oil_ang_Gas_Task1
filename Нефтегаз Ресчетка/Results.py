@@ -7,18 +7,28 @@ import imageio
 
 def permeability(X, Y, permeability_matrix, wells):
     plt.style.use('dark_background')
-    plt.figure()
-    plt.title('Распределение проницаемости')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.pcolormesh(X, Y, permeability_matrix)
+    fig, ax = plt.subplots(figsize=(8, 6))
+
+    # Отображение проницаемости с помощью pcolormesh
+    cax = ax.pcolormesh(X, Y, permeability_matrix, shading='auto', cmap='viridis')
+
+    # Добавление цветовой шкалы
+    cbar = plt.colorbar(cax, label='Проницаемость')
+
+    # Добавление точек для скважин
     for well in wells:
         if well.q <= 0:
-            plt.scatter(well.x_w, well.y_w, marker='x', color='black', s=50)
+            ax.scatter(well.x_w, well.y_w, marker='x', color='black', s=50)
         else:
-            plt.scatter(well.x_w, well.y_w, marker='v', color='black', s=50)
-    plt.colorbar()
-    plt.savefig(f'results files/проницаемость.png', dpi=1000)
+            ax.scatter(well.x_w, well.y_w, marker='v', color='black', s=50)
+
+    # Настройка осей и заголовка
+    ax.set_title('Распределение проницаемости')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+
+    # Сохранение и отображение графика
+    plt.savefig('results files/проницаемость.png', dpi=1000)
     plt.show()
     plt.close()
 

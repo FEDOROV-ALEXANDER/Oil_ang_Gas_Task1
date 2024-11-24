@@ -57,4 +57,4 @@ def solve_for_one_well_explicit(X, Y, x_w, y_w, q, r_w, coef, pressure_start, T,
         productivity.append(q / pressure_start_tensor[int(a[0]), int(b[0])].item() * 10000)
         history.append(pressure_start_tensor.numpy() / 10000)
 
-    return (pressure_start_tensor.numpy() / 10000).T, pressure_w, productivity, time, history
+    return (pressure_start_tensor.numpy() / 10000), pressure_w, productivity, time, history
