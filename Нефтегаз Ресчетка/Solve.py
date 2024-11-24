@@ -2,6 +2,7 @@ import numpy as np
 import torch
 
 
+
 def well_boundary_condition(X, Y, p, q, coef, r_w):
     # Создаем тензоры из массивов numpy
     X_tensor = torch.tensor(X, dtype=torch.float32)
@@ -19,7 +20,7 @@ def well_boundary_condition(X, Y, p, q, coef, r_w):
     return p_tensor.numpy()
 
 
-def solve_for_one_well_explicit(X, Y, x_w, y_w, q, r_w, coef, pressure_start, T, eta):
+def solve_for_one_well_explicit(X, Y, y_w, x_w, q, r_w, coef, pressure_start, T, eta):
     pressure_w = []
     productivity = []
     history = []
@@ -28,7 +29,6 @@ def solve_for_one_well_explicit(X, Y, x_w, y_w, q, r_w, coef, pressure_start, T,
     dx = X[1] - X[0]
     dy = Y[1] - Y[0]
     N_x, N_y = X.shape[0], Y.shape[0]
-
     # Вычисление максимального шага по времени с учетом устойчивости
     dt = 1 / (3 * eta.max() * (dx ** 2 + dy ** 2)) * dx ** 2 * dy ** 2  # шаг по времени в сутках c учетом устойчивости
     time = np.arange(dt, T + dt, dt)

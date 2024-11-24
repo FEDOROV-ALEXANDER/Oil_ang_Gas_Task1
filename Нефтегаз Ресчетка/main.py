@@ -15,10 +15,10 @@ def choose_step(length, width, x_wells, y_wells):
 
 # данные для скважин скважины
 wells = [
-    Well(600, 400, 1.5, 1100, 1),
-    Well(2000, 500, 1.5, -1000, 2),
-    Well(600, 1800, 1.5, -1000, 3),
-    Well(2250, 2200, 1.5, 1000, 4),
+    Well(600, 405, 1.5, -1000, 1),
+    Well(2000, 500, 1.5, 1000, 2),
+    Well(1900, 2100, 1.5, -1000, 3),
+    Well(600, 1800, 1.5, 1000, 4),
 ]
 
 # Ввод входных значений
@@ -63,4 +63,4 @@ r.pressure_on_wells(wells)
 r.productivity(wells)
 r.pressure_result(X, Y, pressure - pressure_start)
 # r.save_data(wells)
-# r.gif_creating(wells, X, Y, pressure_start)
+r.gif_creating(wells, X, Y, pressure_start)
