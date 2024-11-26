@@ -64,7 +64,14 @@ def generate_permeability_matrix(X, Y, permeability, type_number):
     elif type_number == 7:
         # Половинка
         permeability_matrix[:, :Ny//2] = permeability * 2
-
+    elif type_number == 8:
+        # Эллипс
+        center_x, center_y = Nx // 2, Ny // 2
+        radius = 200
+        for i in range(Nx):
+            for j in range(Ny):
+                if 2*(i - center_x) ** 2 + (j - center_y) ** 2 <= radius ** 2:
+                    permeability_matrix[i, j] = permeability * 2
     else:
         raise ValueError("Неверный номер типа. Допустимые значения: 1-7.")
 
